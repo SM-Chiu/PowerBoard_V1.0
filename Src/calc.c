@@ -156,13 +156,13 @@ void rt_calc_data(void)
 }
 
 
-// #define ZOOM_NUM  1000
+#define ZOOM_NUM  1000
 uint32_t  power_idx = 0;
-float product_copy = 0.0f;
-RTC_TimeTypeDef stimestructureget={};
-float vol_copy = 0.0f;
-bool cnt_1s_flag = false;
-RTC_TimeTypeDef rtc_getTime(void);
+// float product_copy = 0.0f;
+// RTC_TimeTypeDef stimestructureget={};
+// float vol_copy = 0.0f;
+// bool cnt_1s_flag = false;
+// RTC_TimeTypeDef rtc_getTime(void);
 void rt_calc_power(void)
 {
     static uint32_t cnt_1ms = 0;
@@ -175,7 +175,6 @@ void rt_calc_power(void)
     // static float product_cumul = 0.0f;
     int i, ret;
     // product = 0.0f;   //重置product = 0；
-    // GPIOA->BSRR = (uint32_t)GPIO_PIN_14;
 
     ret = get_once_adc_val();
    
@@ -269,32 +268,28 @@ void rt_calc_power(void)
 
     if(cnt_50ms == 20) /* 1s */
     {
-        cnt_1s_flag = true;
-        stimestructureget = rtc_getTime();
-        // stimestructureget.Seconds = stimestructureget.Seconds-0.2207*stimestructureget.Seconds;
+        // cnt_1s_flag = true;
+        // stimestructureget = rtc_getTime();
         product /= 20;
-        product_copy = product;
-        product_cumul += product;
+        // product_copy = product;
+        // product_cumul += product;
         power_idx++,
-        vol_copy = vol;
-        // printf("%d \t%02d:%02d:%02d \t%d.%03d\tW \t%d.%03d\tW \t%d.%04d\tA \t%d.%03d\tV\r\n",
-        //     power_idx,
-        //     stimestructureget.Hours,stimestructureget.Minutes,stimestructureget.Seconds,
-        //     (int)product,
-        //     (int)(product*ZOOM_NUM)%ZOOM_NUM,
-        //     (int)product_cumul,
-        //     (int)(product_cumul*ZOOM_NUM)%ZOOM_NUM, 
-        //     (int)(product/vol),
-        //     (int)((product/vol)*ZOOM_NUM*10)%(ZOOM_NUM*10), 
-        //     (int)vol,
-        //     (int)(vol*ZOOM_NUM)%ZOOM_NUM
-        // );
+        // vol_copy = vol;
+        printf("%d \t%d.%03d\tW \t%d.%04d\tA \t%d.%03d\tV\r\n",
+            power_idx,
+            (int)product,
+            (int)(product*ZOOM_NUM)%ZOOM_NUM,
+            (int)(product/vol),
+            (int)((product/vol)*ZOOM_NUM*10)%(ZOOM_NUM*10), 
+            (int)vol,
+            (int)(vol*ZOOM_NUM)%ZOOM_NUM
+        );
 
+          // printf("hello\t\r\n");
         //  printf("P:%d \t I:%d.%03d \t V:%d\r\n", (int)(product*1000), (int)(curr), (int)(curr*1000)%1000, (int)(vol*1000));
         cnt_50ms = 0;
         product = 0;
     }
-    // GPIOA->BRR = (uint32_t)GPIO_PIN_14;
 }
 
 
