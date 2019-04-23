@@ -156,12 +156,12 @@ void rt_calc_data(void)
 }
 
 
-#define ZOOM_NUM  1000
+// #define ZOOM_NUM  1000
 uint32_t  power_idx = 0;
-// float product_copy = 0.0f;
+float product_copy = 0.0f;
 // RTC_TimeTypeDef stimestructureget={};
-// float vol_copy = 0.0f;
-// bool cnt_1s_flag = false;
+float vol_copy = 0.0f;
+bool cnt_1s_flag = false;
 // RTC_TimeTypeDef rtc_getTime(void);
 void rt_calc_power(void)
 {
@@ -268,24 +268,23 @@ void rt_calc_power(void)
 
     if(cnt_50ms == 20) /* 1s */
     {
-        // cnt_1s_flag = true;
+        cnt_1s_flag = true;
         // stimestructureget = rtc_getTime();
         product /= 20;
-        // product_copy = product;
+        product_copy = product;
         // product_cumul += product;
         power_idx++,
-        // vol_copy = vol;
-        printf("%d \t%d.%03d\tW \t%d.%04d\tA \t%d.%03d\tV\r\n",
-            power_idx,
-            (int)product,
-            (int)(product*ZOOM_NUM)%ZOOM_NUM,
-            (int)(product/vol),
-            (int)((product/vol)*ZOOM_NUM*10)%(ZOOM_NUM*10), 
-            (int)vol,
-            (int)(vol*ZOOM_NUM)%ZOOM_NUM
-        );
+        vol_copy = vol;
+        // printf("%d \t%d.%03d\tW \t%d.%04d\tA \t%d.%03d\tV\r\n",
+        //     power_idx,
+        //     (int)product,
+        //     (int)(product*ZOOM_NUM)%ZOOM_NUM,
+        //     (int)(product/vol),
+        //     (int)((product/vol)*ZOOM_NUM*10)%(ZOOM_NUM*10), 
+        //     (int)vol,
+        //     (int)(vol*ZOOM_NUM)%ZOOM_NUM
+        // );
 
-          // printf("hello\t\r\n");
         //  printf("P:%d \t I:%d.%03d \t V:%d\r\n", (int)(product*1000), (int)(curr), (int)(curr*1000)%1000, (int)(vol*1000));
         cnt_50ms = 0;
         product = 0;

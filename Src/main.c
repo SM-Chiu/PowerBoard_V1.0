@@ -44,6 +44,7 @@
 #include "math.h"
 #include "stdbool.h"
 
+#define ZOOM_NUM  1000
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -56,7 +57,11 @@ TIM_HandleTypeDef htimer3;
 /* Private variables ---------------------------------------------------------*/
 extern uint32_t voltage ;
 extern uint32_t current ;
-
+extern float product_copy;
+// extern RTC_TimeTypeDef stimestructureget;   //RTC Time
+// extern float product_cumul;   //Product Accumulation
+extern float vol_copy;
+extern bool cnt_1s_flag;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -191,6 +196,20 @@ int main(void)
   {
     if(flag_calc_power)
     {
+      if(cnt_1s_flag == true)
+      {
+          printf("%d \t%d.%03d\tW \t%d.%04d\tA \t%d.%03d\tV\r\n",
+            power_idx,
+            (int)product_copy,
+            (int)(product_copy*ZOOM_NUM)%ZOOM_NUM,
+            (int)(product_copy/vol_copy),
+            (int)((product_copy/vol_copy)*ZOOM_NUM*10)%(ZOOM_NUM*10), 
+            (int)vol_copy,
+            (int)(vol_copy*ZOOM_NUM)%ZOOM_NUM
+        );
+        cnt_1s_flag = !cnt_1s_flag;
+      }
+
       SEG_ShowPoint(0, 0xFFFFFFFF);
       SEG_ShowPoint(4, 0xFFFFFFFF);
      // SEG_ShowPower(product_cumul);
