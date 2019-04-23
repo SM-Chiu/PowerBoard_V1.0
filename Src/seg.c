@@ -34,24 +34,6 @@ const unsigned char seg_tbl[] = {0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8,
 /*λ��*/
 const unsigned char seg_com[] = {0xef,0xdf,0xbf,0x7f,0xfe,0xfd,0xfb,0xf7, 0xff};
 
-// void CD74HC595_Init(void)
-// {
-
-//   int i;
-//   int j=3000;
-//   OE_H();
-//   SRCLR_H();
-//   OE_L();
-//   do
-//   {
-//     for(i=0;i<8;i++)
-//     {
-//       SEG_ShowOneChar(i,16,0);
-//     }
-//     j--;
-//   }while(j);
-
-// }
 
 void CD74HC595_OutPutData(unsigned char dat)
 {
@@ -85,26 +67,13 @@ void CD74HC595_Init(void)
 {
 
   int i;
-  // int j=30;
   OE_H();
   SRCLR_H();
   OE_L();
-  // do
-  // {
-  //   for(i=0;i<8;i++)
-  //   {
-  //     // printf("It's %d begin\t\n",i);
-  //     SEG_ShowOneChar(i,16,0);
-  //     // printf("It's %d end\t\n",i);
-  //   }
-  //   j--;
-  // }while(j);
-    for(i=0;i<8;i++)
-    {
-      // printf("It's %d begin\t\n",i);
-      SEG_ShowOneChar(i,16,0);
-      // printf("It's %d end\t\n",i);
-    }
+  for(i=0;i<8;i++)
+  {
+    SEG_ShowOneChar(i,16,0);
+  }
   
 }
 

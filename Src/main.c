@@ -44,7 +44,6 @@
 #include "math.h"
 #include "stdbool.h"
 
-#define ZOOM_NUM  1000
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -57,11 +56,7 @@ TIM_HandleTypeDef htimer3;
 /* Private variables ---------------------------------------------------------*/
 extern uint32_t voltage ;
 extern uint32_t current ;
-extern float product_copy;
-extern RTC_TimeTypeDef stimestructureget;
-extern float product_cumul;
-extern float vol_copy;
-extern bool cnt_1s_flag;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,7 +106,7 @@ static bool flag_calc_power = false;
 extern uint32_t power_idx;
 static bool flag_exchange = false;  
 
-// static bool flag = true;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if(htim == (&htimer3))
@@ -120,8 +115,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        if(flag_calc_power) {
           if(flag_exchange == false) {
             power_idx = 0;
-            product_cumul = 0;
-            Time_Config();
+            // product_cumul = 0;
+            // Time_Config();
             flag_exchange = true;
           }
           rt_calc_power();
@@ -178,13 +173,10 @@ int main(void)
   MX_USART1_UART_Init();
   CD74HC595_Init();
   HAL_Delay(1000);
-  MX_RTC_Init();
-  // MX_USART1_UART_Init();
-  // HAL_Delay(1000);
+  // MX_RTC_Init();
   CalibrationRefVol();
   MX_ADC_Init();
   /* USER CODE BEGIN 2 */
-  // CD74HC595_Init();
   HAL_ADCEx_Calibration_Start(&hadc);
   get_once_adc_val();  
   MX_TIM3_Init();
@@ -199,28 +191,9 @@ int main(void)
   {
     if(flag_calc_power)
     {
-
-      if(cnt_1s_flag == true)
-      {
-          printf("%d \t%02d:%02d:%02d \t%d.%03d\tW \t%d.%03d\tW \t%d.%04d\tA \t%d.%03d\tV\r\n",
-            power_idx,
-            stimestructureget.Hours,stimestructureget.Minutes,stimestructureget.Seconds,
-            (int)product_copy,
-            (int)(product_copy*ZOOM_NUM)%ZOOM_NUM,
-            (int)product_cumul,
-            (int)(product_cumul*ZOOM_NUM)%ZOOM_NUM, 
-            (int)(product_copy/vol_copy),
-            (int)((product_copy/vol_copy)*ZOOM_NUM*10)%(ZOOM_NUM*10), 
-            (int)vol_copy,
-            (int)(vol_copy*ZOOM_NUM)%ZOOM_NUM
-        );
-        cnt_1s_flag = !cnt_1s_flag;
-      }
-
-      // SEG_ShowPoint(0, 0xFFFFFFFF);
-      // SEG_ShowPoint(4, 0xFFFFFFFF);
-      // printf("__LINE__:%d\t %d\t\r\n",__LINE__, (int)product_cumul);
-      SEG_ShowPower(product_cumul);
+      SEG_ShowPoint(0, 0xFFFFFFFF);
+      SEG_ShowPoint(4, 0xFFFFFFFF);
+     // SEG_ShowPower(product_cumul);
     } 
     else 
     {
